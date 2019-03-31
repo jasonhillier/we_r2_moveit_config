@@ -1,0 +1,258 @@
+<?xml version="1.0" ?>
+<robot name="we_r2_arm" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<xacro:property name="simple_collision" value="true" />
+<link name="base_link">
+  <visual>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <geometry>
+      <mesh filename="package://we_r2_moveit_config/config/bin_stl/base_link_m-binary.stl"/>-->
+      <!--<cylinder length="0.42" radius="0.07"/>-->
+    </geometry>
+    <material name="silver">
+      <color rgba="1 0 0 1"/>
+    </material>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <geometry>
+      <xacro:if value="${simple_collision}">
+        <cylinder length="0.42" radius="0.07"/>
+      </xacro:if>
+      <xacro:unless value="${simple_collision}">
+        <mesh filename="package://we_r2_moveit_config/config/bin_stl/base_link_m-binary.stl"/>
+      </xacro:unless>
+     </geometry>
+  </collision>
+</link>
+<link name="shoulder__1">
+  <inertial>
+    <origin rpy="0 0 0" xyz="0.019128000000000003 0.0008300000000000002 0.042733999999999994"/>
+    <mass value="1.493039"/>
+    <inertia ixx="0.002393" ixy="-1.2e-05" ixz="0.003808" iyy="0.002653" iyz="-0.003962" izz="0.001979"/>
+  </inertial>
+  <visual>
+    <origin rpy="0 0 0" xyz="-0.000148 -0.00137 -0.106993"/>
+    <geometry>
+      <mesh filename="package://we_r2_moveit_config/config/bin_stl/shoulder__1_m-binary.stl"/>
+    </geometry>
+    <material name="silver">
+      <color rgba="1 0 0 1"/>
+    </material>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="-0.000148 -0.00137 -0.106993"/>
+    <geometry>
+      <mesh filename="package://we_r2_moveit_config/config/bin_stl/shoulder__1_m-binary.stl"/>
+    </geometry>
+  </collision>
+</link>
+<link name="end_effector_link__1">
+  <inertial>
+    <origin rpy="0 0 0" xyz="-0.003476 -0.0016250000000000153 -0.006948999999999997"/>
+    <mass value="0.0358"/>
+    <inertia ixx="5e-06" ixy="1e-06" ixz="0.000677" iyy="1.2e-05" iyz="-0.000674" izz="1e-05"/>
+  </inertial>
+  <visual>
+    <origin rpy="0 0 0" xyz="0.003959 0.223317 -0.09394"/>
+    <geometry>
+      <mesh filename="package://we_r2_moveit_config/config/bin_stl/end_effector_link__1_m-binary.stl"/>
+    </geometry>
+    <material name="silver">
+      <color rgba="1 0 0 1"/>
+    </material>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="0.003959 0.223317 -0.09394"/>
+    <geometry>
+      <mesh filename="package://we_r2_moveit_config/config/bin_stl/end_effector_link__1_m-binary.stl"/>
+    </geometry>
+  </collision>
+</link>
+<link name="upper_arm__1">
+  <inertial>
+    <origin rpy="0 0 0" xyz="0.023742 -0.158727 0.122109"/>
+    <mass value="0.465826"/>
+    <inertia ixx="0.000325" ixy="1.2e-05" ixz="0.022719" iyy="0.000484" iyz="-0.022725" izz="0.000488"/>
+  </inertial>
+  <visual>
+    <origin rpy="0 0 0" xyz="0.011507 -0.000645 -0.164119"/>
+    <geometry>
+      <mesh filename="package://we_r2_moveit_config/config/bin_stl/upper_arm__1_m-binary.stl"/>
+    </geometry>
+    <material name="silver">
+      <color rgba="1 0 0 1"/>
+    </material>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="0.011507 -0.000645 -0.164119"/>
+    <geometry>
+      <mesh filename="package://we_r2_moveit_config/config/bin_stl/upper_arm__1_m-binary.stl"/>
+    </geometry>
+  </collision>
+</link>
+<link name="Forearm__1">
+  <inertial>
+    <origin rpy="0 0 0" xyz="0.014801000000000002 0.0008319999999999994 -0.101349"/>
+    <mass value="0.670217"/>
+    <inertia ixx="0.004243" ixy="-1e-06" ixz="0.027051" iyy="0.004259" iyz="-0.027034" izz="0.000301"/>
+  </inertial>
+  <visual>
+    <origin rpy="0 0 0" xyz="-0.044786 0.158107 -0.287456"/>
+    <geometry>
+      <mesh filename="package://we_r2_moveit_config/config/bin_stl/Forearm__1_m-binary.stl"/>
+    </geometry>
+    <material name="silver">
+      <color rgba="1 0 0 1"/>
+    </material>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="-0.044786 0.158107 -0.287456"/>
+    <geometry>
+      <mesh filename="package://we_r2_moveit_config/config/bin_stl/Forearm__1_m-binary.stl"/>
+    </geometry>
+  </collision>
+</link>
+<link name="wrist_1__1">
+  <inertial>
+    <origin rpy="0 0 0" xyz="-0.024984000000000003 -0.00839999999999999 0.0014440000000000008"/>
+    <mass value="0.282343"/>
+    <inertia ixx="0.000155" ixy="-5e-06" ixz="0.005515" iyy="0.000133" iyz="-0.005508" izz="0.000161"/>
+  </inertial>
+  <visual>
+    <origin rpy="0 0 0" xyz="-0.033535 0.158674 -0.109652"/>
+    <geometry>
+      <mesh filename="package://we_r2_moveit_config/config/bin_stl/wrist_1__1_m-binary.stl"/>
+    </geometry>
+    <material name="silver">
+      <color rgba="1 0 0 1"/>
+    </material>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="-0.033535 0.158674 -0.109652"/>
+    <geometry>
+        <mesh filename="package://we_r2_moveit_config/config/bin_stl/wrist_1__1_m-binary.stl"/>
+    </geometry>
+  </collision>
+</link>
+<link name="wrist_2__1">
+  <inertial>
+    <origin rpy="0 0 0" xyz="-0.0019010000000000008 -0.026297999999999988 -0.0011819999999999886"/>
+    <mass value="0.282365"/>
+    <inertia ixx="0.000157" ixy="-5e-06" ixz="0.007246" iyy="0.000151" iyz="-0.007265" izz="0.000142"/>
+  </inertial>
+  <visual>
+    <origin rpy="0 0 0" xyz="-0.008481 0.190801 -0.116045"/>
+    <geometry>
+      <mesh filename="package://we_r2_moveit_config/config/bin_stl/wrist_2__1_m-binary.stl"/>
+    </geometry>
+    <material name="silver">
+      <color rgba="1 0 0 1"/>
+    </material>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="-0.008481 0.190801 -0.116045"/>
+    <geometry>
+      <mesh filename="package://we_r2_moveit_config/config/bin_stl/wrist_2__1_m-binary.stl"/>
+    </geometry>
+  </collision>
+</link>
+<joint name="joint5" type="continuous">
+  <origin rpy="0 0 0" xyz="-0.01244 -0.032516 -0.022105"/>
+  <parent link="wrist_2__1"/>
+  <child link="end_effector_link__1"/>
+  <axis xyz="-0.004381 -0.002047 -0.008753"/>
+</joint>
+<transmission name="joint5_tran">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="joint5">
+    <hardwareInterface>PositionJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="joint5_actr">
+    <hardwareInterface>PositionJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+<joint name="joint1" type="continuous">
+  <origin rpy="0 0 0" xyz="-0.011655 -0.000725 0.057126"/>
+  <parent link="shoulder__1"/>
+  <child link="upper_arm__1"/>
+  <axis xyz="-0.009987 -0.000514 -3e-06"/>
+</joint>
+<transmission name="joint1_tran">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="joint1">
+    <hardwareInterface>PositionJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="joint1_actr">
+    <hardwareInterface>PositionJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+<joint name="joint2" type="continuous">
+  <origin rpy="0 0 0" xyz="0.056293 -0.158752 0.123337"/>
+  <parent link="upper_arm__1"/>
+  <child link="Forearm__1"/>
+  <axis xyz="0.009987 0.000514 3e-06"/>
+</joint>
+<transmission name="joint2_tran">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="joint2">
+    <hardwareInterface>PositionJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="joint2_actr">
+    <hardwareInterface>PositionJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+<joint name="joint0" type="continuous">
+  <origin rpy="0 0 0" xyz="0.000148 0.00137 0.106993"/>
+  <parent link="base_link"/>
+  <child link="shoulder__1"/>
+  <axis xyz="-2e-06 -2.3e-05 0.01"/>
+</joint>
+<transmission name="joint0_tran">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="joint0">
+    <hardwareInterface>PositionJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="joint0_actr">
+    <hardwareInterface>PositionJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+<joint name="joint3" type="continuous">
+  <origin rpy="0 0 0" xyz="-0.011251 -0.000567 -0.177804"/>
+  <parent link="Forearm__1"/>
+  <child link="wrist_1__1"/>
+  <axis xyz="-0.009987 -0.000514 -3e-06"/>
+</joint>
+<transmission name="joint3_tran">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="joint3">
+    <hardwareInterface>PositionJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="joint3_actr">
+    <hardwareInterface>PositionJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+<joint name="joint4" type="continuous">
+  <origin rpy="0 0 0" xyz="-0.025054 -0.032127 0.006393"/>
+  <parent link="wrist_1__1"/>
+  <child link="wrist_2__1"/>
+  <axis xyz="0.000503 -0.009778 0.002035"/>
+</joint>
+<transmission name="joint4_tran">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="joint4">
+    <hardwareInterface>PositionJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="joint4_actr">
+    <hardwareInterface>PositionJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+<gazebo>
+  <plugin filename="libgazebo_ros_control.so" name="control"/>
+</gazebo>
+</robot>
