@@ -1,0 +1,3 @@
+<launch>
+	<node name="direct_drive" pkg="roboreader" type="dd" respawn="true" respawn_delay="5" output="screen" />
+</launch>
