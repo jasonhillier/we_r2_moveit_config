@@ -1,3 +1,4 @@
 <launch>
 	<node name="direct_drive" pkg="roboreader" type="dd" respawn="true" respawn_delay="5" output="screen" />
+	<node name="remote_controller" pkg="rosbridge_server" type="rosbridge_websocket" respawn="true" />
 </launch>
