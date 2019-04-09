@@ -1,0 +1,14 @@
+<launch>
+
+  <!-- Load the URDF, SRDF and other .yaml configuration files on the param server -->
+  <include file="$(find we_r2_moveit_config)/launch/planning_context.launch">
+    <arg name="load_robot_description" value="true"/>
+  </include>
+
+  <!-- load controllers -->
+  <include file="$(find we_r2_moveit_config)/launch/ros_controllers.launch" />
+
+  <!-- load hardware interface for Arduino/listener-->
+  <!-- published to robot /joint_states -->
+  <node name="we_r2_hw_interface" pkg="we_r2_moveit_config" type="we_r2_hw_interface" required="true" output="screen"/>
+</launch>

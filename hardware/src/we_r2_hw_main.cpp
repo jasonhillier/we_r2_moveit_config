@@ -41,7 +41,7 @@
 
 int main(int argc, char** argv)
 {
-  ros::init(argc, argv, "rrbot_hw_interface");
+  ros::init(argc, argv, "we_r2_hw_interface");
   ros::NodeHandle nh;
 
   // NOTE: We run the ROS loop in a separate thread as external calls such
@@ -50,18 +50,13 @@ int main(int argc, char** argv)
   spinner.start();
 
   // Create the hardware interface specific to your robot
-  boost::shared_ptr<RRBotHWInterface> rrbot_hw_interface
-    (new RRBotHWInterface(nh));
-  rrbot_hw_interface->init();
+  boost::shared_ptr<WER2HwInterface> we_r2_hw_interface
+    (new WER2HwInterface(nh));
+  we_r2_hw_interface->init();
 
   while(true==true) {
 	  sleep(1);
   }
 
-  // Start the control loop
-  /*
-  ros_control_boilerplate::GenericHWControlLoop control_loop(nh, rrbot_hw_interface);
-  control_loop.run(); // Blocks until shutdown signal recieved
-*/
   return 0;
 }

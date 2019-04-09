@@ -10,24 +10,24 @@ include_directories(hardware/inc/;${catkin_INCLUDE_DIRS};)
 link_directories(${catkin_LIBRARY_DIRS})
 
 # RRBot Hardware Interface
-add_library(we_r2_hw_interface
+add_library(we_r2_hw_interface_module
   hardware/inc/we_r2_hw_interface.cpp
 )
-target_link_libraries(we_r2_hw_interface
+target_link_libraries(we_r2_hw_interface_module
   generic_hw_interface
   ${catkin_LIBRARIES}
 )
 
 # Main control executable
-add_executable(we_r2_hw_controller hardware/src/we_r2_hw_main.cpp)
-target_link_libraries(we_r2_hw_controller we_r2_hw_interface ${catkin_LIBRARIES})
+add_executable(we_r2_hw_interface hardware/src/we_r2_hw_main.cpp)
+target_link_libraries(we_r2_hw_interface we_r2_hw_interface_module ${catkin_LIBRARIES})
 
 install(DIRECTORY launch DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
   PATTERN "setup_assistant.launch" EXCLUDE)
 
 # Install executables
 install(TARGETS
-    we_r2_hw_controller
+    we_r2_hw_interface
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
