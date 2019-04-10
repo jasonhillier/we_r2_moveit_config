@@ -5,10 +5,8 @@
     <arg name="load_robot_description" value="true"/>
   </include>
 
-  <!-- load controllers -->
-  <include file="$(find we_r2_moveit_config)/launch/ros_controllers.launch" />
+  <!-- action service to forward messages to Arduino -->
+  <node ns="arm_controller" name="arm_action_node" pkg="we_r2_moveit_config" type="joint_trajectory_action_node" respawn="true" output="screen" />
 
-  <!-- load hardware interface for Arduino/listener-->
-  <!-- published to robot /joint_states -->
-  <node name="we_r2_hw_interface" pkg="we_r2_moveit_config" type="we_r2_hw_interface" required="true" output="screen"/>
+  <!-- load hardware serial interface for Arduino/listener-->
 </launch>
