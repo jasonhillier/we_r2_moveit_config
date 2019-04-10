@@ -206,12 +206,11 @@
     <mechanicalReduction>1</mechanicalReduction>
   </actuator>
 </transmission>
-<joint name="joint0" type="revolute">
+<joint name="joint0" type="continuous">
   <origin rpy="0 0 0" xyz="0.000666 -0.07459 0.106659"/>
   <parent link="base_link"/>
   <child link="shoulder__1"/>
   <axis xyz="0.0 0.0 0.01"/>
-  <limit effort="100" velocity="1.0" lower="-6.5" upper="6.5" />
 </joint>
 <transmission name="joint0_tran">
   <type>transmission_interface/SimpleTransmission</type>
