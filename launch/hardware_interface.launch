@@ -6,7 +6,7 @@
   </include>
 
   <!-- action service to forward messages to Arduino -->
-  <node ns="arm_controller" name="arm_action_node" pkg="we_r2_moveit_config" type="joint_trajectory_action_node" respawn="true" output="screen" />
+  <node ns="arm_controller" name="arm_action_node" pkg="we_r2_moveit_config" type="joint_trajectory_action_node" required="true" output="screen" />
 
   <!-- load hardware serial interface for Arduino/listener-->
 </launch>

@@ -32,6 +32,7 @@
 #include <ros/ros.h>
 #include <actionlib/server/action_server.h>
 
+#include <sensor_msgs/JointState.h>
 #include <trajectory_msgs/JointTrajectory.h>
 #include <control_msgs/FollowJointTrajectoryAction.h>
 #include <control_msgs/JointTrajectoryControllerState.h>
@@ -94,6 +95,7 @@ public:
     }
     pn.param("constraints/stopped_velocity_tolerance", stopped_velocity_tolerance_, 0.01);
 
+    pub_joint_states = node_.advertise<sensor_msgs::JointState>("/joint_states", 1);
 
     pub_controller_command_ =
       node_.advertise<trajectory_msgs::JointTrajectory>("command", 1);
@@ -185,12 +187,14 @@ private:
   void goalCB(GoalHandle gh)
   {
     // Ensures that the joints in the goal match the joints we are commanding.
+    /*
     if (!setsEqual(joint_names_, gh.getGoal()->trajectory.joint_names))
     {
       ROS_ERROR("Joints on incoming goal don't match our joints");
       gh.setRejected();
       return;
     }
+    */
 
     // Cancels the currently active goal.
     if (has_active_goal_)
@@ -208,6 +212,8 @@ private:
     gh.setAccepted();
     active_goal_ = gh;
     has_active_goal_ = true;
+
+    ROS_INFO("Sending goal to controller...");
 
     // Sends the trajectory along to the controller
     current_traj_ = active_goal_.getGoal()->trajectory;
@@ -233,6 +239,7 @@ private:
   ros::NodeHandle node_;
   JTAS action_server_;
   ros::Publisher pub_controller_command_;
+  ros::Publisher pub_joint_states;
   ros::Subscriber sub_controller_state_;
   ros::Timer watchdog_timer_;
 
@@ -252,6 +259,20 @@ private:
   {
     last_controller_state_ = msg;
     ros::Time now = ros::Time::now();
+
+    if (msg->actual.positions.size() > 0)
+    {
+      if (msg->actual.positions.size() != joint_names_.size())
+      {
+        ROS_WARN("Receving different joins than expected!");
+      }
+      sensor_msgs::JointState joint_state;
+      joint_state.header.stamp = now;
+      joint_state.name = joint_names_;
+      joint_state.position = msg->actual.positions;
+
+      pub_joint_states.publish(joint_state);
+    }
 
     if (!has_active_goal_)
       return;
