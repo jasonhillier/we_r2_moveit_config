@@ -1,6 +1,5 @@
 <?xml version="1.0" ?>
 <robot name="we_r2_arm" xmlns:xacro="http://www.ros.org/wiki/xacro">
-<xacro:property name="simple_collision" value="true" />
 <link name="base_link">
   <visual>
     <origin rpy="0 0 0" xyz="0 0 0"/>
@@ -14,12 +13,7 @@
   <collision>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <geometry>
-      <xacro:if value="${simple_collision}">
-        <cylinder length="0.42" radius="0.07"/>
-      </xacro:if>
-      <xacro:unless value="${simple_collision}">
-        <mesh filename="package://we_r2_moveit_config/config/bin_stl/base_link_m-binary.stl"/>
-      </xacro:unless>
+        <mesh filename="package://we_r2_moveit_config/config/col_stl/collision_base_link.stl"/>
     </geometry>
   </collision>
 </link>
@@ -41,7 +35,7 @@
   <collision>
     <origin rpy="0 0 0" xyz="0.035775 0.074529 -0.366958"/>
     <geometry>
-      <mesh filename="package://we_r2_moveit_config/config/bin_stl/Forearm__1_m-binary.stl"/>
+        <mesh filename="package://we_r2_moveit_config/config/col_stl/collision_forearm.stl"/>
     </geometry>
   </collision>
 </link>
@@ -63,7 +57,7 @@
   <collision>
     <origin rpy="0 0 0" xyz="0.024453 0.074942 -0.544758"/>
     <geometry>
-      <mesh filename="package://we_r2_moveit_config/config/bin_stl/wrist_1__1_m-binary.stl"/>
+        <mesh filename="package://we_r2_moveit_config/config/col_stl/collision_wrist_1.stl"/>
     </geometry>
   </collision>
 </link>
@@ -85,7 +79,7 @@
   <collision>
     <origin rpy="0 0 0" xyz="-0.012324 0.074585 -0.163809"/>
     <geometry>
-      <mesh filename="package://we_r2_moveit_config/config/bin_stl/upper_arm__1_m-binary.stl"/>
+        <mesh filename="package://we_r2_moveit_config/config/col_stl/collision_upper_arm.stl"/>
     </geometry>
   </collision>
 </link>
@@ -107,7 +101,7 @@
   <collision>
     <origin rpy="0 0 0" xyz="-0.000666 0.07459 -0.106659"/>
     <geometry>
-      <mesh filename="package://we_r2_moveit_config/config/bin_stl/shoulder__1_m-binary.stl"/>
+        <mesh filename="package://we_r2_moveit_config/config/col_stl/collision_shoulder.stl"/>
     </geometry>
   </collision>
 </link>
@@ -129,7 +123,7 @@
   <collision>
     <origin rpy="0 0 0" xyz="-0.002217 0.074916 -0.576213"/>
     <geometry>
-      <mesh filename="package://we_r2_moveit_config/config/bin_stl/wrist_2__1_m-binary.stl"/>
+        <mesh filename="package://we_r2_moveit_config/config/col_stl/collision_wrist_2.stl"/>
     </geometry>
   </collision>
 </link>
@@ -149,9 +143,9 @@
     </material>
   </visual>
   <collision>
-    <origin rpy="0 0 0" xyz="-0.002069 0.043403 -0.602813"/>
+    <origin rpy="0 1.5708 0" xyz="-3.800000000000027e-05 0.007937999999999994 -1.8000000000073513e-05"/>
     <geometry>
-      <mesh filename="package://we_r2_moveit_config/config/bin_stl/end_effector_link__1_m-binary.stl"/>
+      <cylinder length="0.05" radius="0.02"/>
     </geometry>
   </collision>
 </link>
