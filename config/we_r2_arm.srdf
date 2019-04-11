@@ -21,6 +21,14 @@
         <link name="end_effector_link__1" />
     </group>
     <!--GROUP STATES: Purpose: Define a named state for a particular group, in terms of joint values. This is useful to define states like 'folded arms'-->
+    <group_state name="home" group="arm">
+        <joint name="joint0" value="0" />
+        <joint name="joint1" value="0" />
+        <joint name="joint2" value="0" />
+        <joint name="joint3" value="0" />
+        <joint name="joint4" value="0" />
+        <joint name="joint5" value="0" />
+    </group_state>
     <group_state name="home" group="hand">
         <joint name="joint5" value="0" />
     </group_state>
@@ -35,7 +43,6 @@
     <disable_collisions link1="base_link" link2="shoulder__1" reason="Adjacent" />
     <disable_collisions link1="base_link" link2="upper_arm__1" reason="Adjacent" />
     <disable_collisions link1="end_effector_link__1" link2="wrist_1__1" reason="Never" />
-    <disable_collisions link1="end_effector_link__1" link2="Forearm__1" reason="Never" />
     <disable_collisions link1="end_effector_link__1" link2="upper_arm__1" reason="Never" />
     <disable_collisions link1="end_effector_link__1" link2="wrist_2__1" reason="Adjacent" />
     <disable_collisions link1="shoulder__1" link2="upper_arm__1" reason="Adjacent" />
