@@ -12,11 +12,7 @@
  * Author: Jesse Weisberg
  *  https://github.com/jesseweisberg/moveo_ros
  */
-#if (ARDUINO >= 100)
-  #include <Arduino.h>
-#else
-  #include <WProgram.h>
-#endif
+
 #include <ros.h>
 
 #include <sensor_msgs/JointState.h>
@@ -28,40 +24,13 @@
 #include <std_msgs/UInt16.h>
 #include <AccelStepper.h>
 #include <MultiStepper.h>
+#include "ramps_16_pins.h"
 
-#define STEPS_PER_REV      7280
+#define STEPS_PER_REV      7680.0
 #define STEPPER_MAX_SPEED  1200
 #define JOINT_PUBLISH_RATE  200 //ms
-#define MOTOR_COUNT          5
-
-// Joint 1
-#define E1_STEP_PIN        36
-#define E1_DIR_PIN         34
-#define E1_ENABLE_PIN      30
-
-// Joint 2
-#define Z_STEP_PIN         46
-#define Z_DIR_PIN          48
-#define Z_ENABLE_PIN       62
-#define Z_MIN_PIN          18
-#define Z_MAX_PIN          19
-
-// Joint 3
-#define Y_STEP_PIN         60
-#define Y_DIR_PIN          61
-#define Y_ENABLE_PIN       56
-#define Y_MIN_PIN          14
-#define Y_MAX_PIN          15
-
-// Joint 4
-#define X_STEP_PIN         54
-#define X_DIR_PIN          55
-#define X_ENABLE_PIN       38
-
-// Joint 5 
-#define E0_STEP_PIN        26
-#define E0_DIR_PIN         28
-#define E0_ENABLE_PIN      24
+#define MOTOR_COUNT          6
+#define RAD_PER_REV         6.283 //radians per revolution
 
 AccelStepper joint0(1,E1_STEP_PIN, E1_DIR_PIN);
 AccelStepper joint1(1,Z_STEP_PIN, Z_DIR_PIN);
@@ -81,14 +50,14 @@ ros::NodeHandle nh;
 
 //publisher to give joint feedback to ROS
 sensor_msgs::JointState _joint_state_msg;
-ros::Publisher joint_pub("/joint_positions",&_joint_state_msg);
+ros::Publisher joint_pub("/joint_states",&_joint_state_msg);
 
 //callbacks
 void arm_cb(const sensor_msgs::JointState& joint_angles){
     _joint_status = 1;
     for(int i=0; i<joint_angles.position_length && i<MOTOR_COUNT; i++)
     {
-        _current_joint_pos[i] = joint_angles.position[i]*STEPS_PER_REV;
+        _current_joint_pos[i] = (joint_angles.position[i]/RAD_PER_REV)*STEPS_PER_REV;
     }
 }
 
@@ -98,47 +67,61 @@ void gripper_cb( const std_msgs::UInt16& cmd_msg){
 }
 
 //instantiate subscribers
-ros::Subscriber<sensor_msgs::JointState> arm_sub("/move_group/fake_controller_joint_positions",arm_cb); //subscribes to move_it fake controller, which publishes joint positions for motion plan.
+ros::Subscriber<sensor_msgs::JointState> arm_sub("/move_group/fake_controller_joint_states",arm_cb); //subscribes to move_it fake controller, which publishes joint positions for motion plan.
 ros::Subscriber<std_msgs::UInt16> gripper_sub("gripper_angle", gripper_cb); //subscribes to gripper position
 //to publish from terminal: rostopic pub gripper_angle std_msgs/UInt16 <0-180>
 
 void setup() {
-  //put your setup code here, to run once:
-  Serial.begin(57600);
-  pinMode(13,OUTPUT);
-  digitalWrite(13, HIGH); //confirm sketch loaded
-  _joint_status = 0;
+    //put your setup code here, to run once:
+    nh.getHardware()->setBaud(230400);
+    pinMode(13,OUTPUT);
+    digitalWrite(13, HIGH); //confirm sketch loaded
+    _joint_status = 0;
 
-  nh.initNode();
-  nh.subscribe(arm_sub);
-  nh.subscribe(gripper_sub);
-  //nh.advertise(steps);
+    nh.initNode();
+    nh.subscribe(arm_sub);
+    nh.subscribe(gripper_sub);
+    nh.advertise(joint_pub);
 
-  // Configure each stepper
-  joint0.setMaxSpeed(STEPPER_MAX_SPEED);
-  joint1.setMaxSpeed(STEPPER_MAX_SPEED);
-  joint2.setMaxSpeed(STEPPER_MAX_SPEED);
-  joint3.setMaxSpeed(STEPPER_MAX_SPEED);
-  joint4.setMaxSpeed(STEPPER_MAX_SPEED);
+    // Configure each stepper
+    joint0.setMaxSpeed(STEPPER_MAX_SPEED);
+    joint0.setPinsInverted(false,false,true);
+    joint0.setEnablePin(E1_ENABLE_PIN);
 
-  // Then give them to MultiStepper to manage
-  steppers.addStepper(joint0);
-  steppers.addStepper(joint1);
-  steppers.addStepper(joint2);
-  steppers.addStepper(joint3);
-  steppers.addStepper(joint4);
+    joint1.setMaxSpeed(STEPPER_MAX_SPEED);
+    joint1.setPinsInverted(false,false,true);
+    joint1.setEnablePin(X_ENABLE_PIN);
 
-  //build joint name list
-  for(int i=0; i<MOTOR_COUNT; i++)
-  {
-      _joint_names[i] = new char[7];
-      String("joint" + i).toCharArray(_joint_names[i], 7);
-  }
+    joint2.setMaxSpeed(STEPPER_MAX_SPEED);
+    joint2.setPinsInverted(false,false,true);
+    joint2.setEnablePin(Y_ENABLE_PIN);
 
-  // Configure gripper servo
-  gripper.attach(11);
-  
-  digitalWrite(13, LOW); //toggle led
+    joint3.setMaxSpeed(STEPPER_MAX_SPEED);
+    joint3.setPinsInverted(false,false,true);
+    joint3.setEnablePin(Z_ENABLE_PIN);
+
+    joint4.setMaxSpeed(STEPPER_MAX_SPEED);
+    joint4.setPinsInverted(false,false,true);
+    joint4.setEnablePin(E0_ENABLE_PIN);
+
+    // Then give them to MultiStepper to manage
+    steppers.addStepper(joint0);
+    steppers.addStepper(joint1);
+    steppers.addStepper(joint2);
+    steppers.addStepper(joint3);
+    steppers.addStepper(joint4);
+
+    //build joint name list
+    for(int i=0; i<MOTOR_COUNT; i++)
+    {
+        _joint_names[i] = new char[7];
+        String("joint" + String(i)).toCharArray(_joint_names[i], 7);
+    }
+
+    // Configure gripper servo
+    gripper.attach(SERVO_1);
+
+    digitalWrite(13, LOW); //toggle led
 }
 
 void loop() {
@@ -149,7 +132,7 @@ void loop() {
 
         steppers.moveTo(_current_joint_pos);
         nh.spinOnce();
-        steppers.runSpeedToPosition(); // Blocks until all are in position
+        steppers.run(); //start moving
 
         digitalWrite(13, LOW); //have led indicate it is no longer moving
     }
@@ -160,17 +143,17 @@ void loop() {
         _joint_state_msg.name_length = MOTOR_COUNT;
         _joint_state_msg.name = _joint_names;
         _joint_state_msg.position_length = MOTOR_COUNT;
-        _joint_state_msg.position[0] = joint0.currentPosition();
-        _joint_state_msg.position[1] = joint1.currentPosition();
-        _joint_state_msg.position[2] = joint2.currentPosition();
-        _joint_state_msg.position[3] = joint3.currentPosition();
-        _joint_state_msg.position[4] = joint4.currentPosition();
+        _joint_state_msg.position[0] = joint0.currentPosition()/STEPS_PER_REV*RAD_PER_REV;
+        _joint_state_msg.position[1] = joint1.currentPosition()/STEPS_PER_REV*RAD_PER_REV;
+        _joint_state_msg.position[2] = joint2.currentPosition()/STEPS_PER_REV*RAD_PER_REV;
+        _joint_state_msg.position[3] = joint3.currentPosition()/STEPS_PER_REV*RAD_PER_REV;
+        _joint_state_msg.position[4] = joint4.currentPosition()/STEPS_PER_REV*RAD_PER_REV;
         _joint_state_msg.header.stamp = nh.now();
 
         joint_pub.publish(&_joint_state_msg);
     }
 
     nh.spinOnce();
-    delay(1);
+    steppers.run(); //continue moving
   
 }
