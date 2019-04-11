@@ -1,3 +1,4 @@
+rate: 0.5
 controller_list:
   - name: fake_arm_controller
     joints:
@@ -6,7 +7,4 @@ controller_list:
       - joint2
       - joint3
       - joint4
-      - joint5
-  - name: fake_hand_controller
-    joints:
       - joint5
