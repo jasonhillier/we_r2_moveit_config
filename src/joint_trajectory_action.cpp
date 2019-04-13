@@ -26,7 +26,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-
+// Code modified from:
 // Author: Stuart Glaser
 
 #include <ros/ros.h>
@@ -36,6 +36,7 @@
 #include <trajectory_msgs/JointTrajectory.h>
 #include <control_msgs/FollowJointTrajectoryAction.h>
 #include <control_msgs/JointTrajectoryControllerState.h>
+#include "joint_trajectory_queue.h"
 
 const double DEFAULT_GOAL_THRESHOLD = 0.1;
 
@@ -47,6 +48,7 @@ private:
 public:
   JointTrajectoryExecuter(ros::NodeHandle &n) :
     node_(n),
+    traj_queue_(n),
     action_server_(node_, "follow_joint_trajectory",
                    boost::bind(&JointTrajectoryExecuter::goalCB, this, _1),
                    boost::bind(&JointTrajectoryExecuter::cancelCB, this, _1),
@@ -97,8 +99,6 @@ public:
 
     pub_joint_states = node_.advertise<sensor_msgs::JointState>("/joint_states", 1);
 
-    pub_controller_command_ =
-      node_.advertise<trajectory_msgs::JointTrajectory>("command", 1);
     sub_controller_state_ =
       node_.subscribe("state", 1, &JointTrajectoryExecuter::controllerStateCB, this);
 
@@ -124,7 +124,7 @@ public:
 
   ~JointTrajectoryExecuter()
   {
-    pub_controller_command_.shutdown();
+    traj_queue_.shutdown();
     sub_controller_state_.shutdown();
     watchdog_timer_.stop();
   }
@@ -173,9 +173,7 @@ private:
       if (should_abort)
       {
         // Stops the controller.
-        trajectory_msgs::JointTrajectory empty;
-        empty.joint_names = joint_names_;
-        pub_controller_command_.publish(empty);
+        traj_queue_.stop();
 
         // Marks the current goal as aborted.
         active_goal_.setAborted();
@@ -200,9 +198,7 @@ private:
     if (has_active_goal_)
     {
       // Stops the controller.
-      trajectory_msgs::JointTrajectory empty;
-      empty.joint_names = joint_names_;
-      pub_controller_command_.publish(empty);
+      traj_queue_.stop();
 
       // Marks the current goal as canceled.
       active_goal_.setCanceled();
@@ -217,7 +213,7 @@ private:
 
     // Sends the trajectory along to the controller
     current_traj_ = active_goal_.getGoal()->trajectory;
-    pub_controller_command_.publish(current_traj_);
+    traj_queue_.set(current_traj_);
   }
 
   void cancelCB(GoalHandle gh)
@@ -225,9 +221,7 @@ private:
     if (active_goal_ == gh)
     {
       // Stops the controller.
-      trajectory_msgs::JointTrajectory empty;
-      empty.joint_names = joint_names_;
-      pub_controller_command_.publish(empty);
+      traj_queue_.stop();
 
       // Marks the current goal as canceled.
       active_goal_.setCanceled();
@@ -238,10 +232,10 @@ private:
 
   ros::NodeHandle node_;
   JTAS action_server_;
-  ros::Publisher pub_controller_command_;
   ros::Publisher pub_joint_states;
   ros::Subscriber sub_controller_state_;
   ros::Timer watchdog_timer_;
+  JointTrajectoryQueue traj_queue_;
 
   bool has_active_goal_;
   GoalHandle active_goal_;
@@ -302,9 +296,7 @@ private:
         if (constraint >= 0 && abs_error > constraint)
         {
           // Stops the controller.
-          trajectory_msgs::JointTrajectory empty;
-          empty.joint_names = joint_names_;
-          pub_controller_command_.publish(empty);
+          traj_queue_.stop();
 
           active_goal_.setAborted();
           has_active_goal_ = false;
