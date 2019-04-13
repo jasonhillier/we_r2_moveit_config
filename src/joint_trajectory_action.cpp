@@ -185,14 +185,12 @@ private:
   void goalCB(GoalHandle gh)
   {
     // Ensures that the joints in the goal match the joints we are commanding.
-    /*
     if (!setsEqual(joint_names_, gh.getGoal()->trajectory.joint_names))
     {
       ROS_ERROR("Joints on incoming goal don't match our joints");
       gh.setRejected();
       return;
     }
-    */
 
     // Cancels the currently active goal.
     if (has_active_goal_)
@@ -284,7 +282,7 @@ private:
     int last = current_traj_.points.size() - 1;
     ros::Time end_time = current_traj_.header.stamp + current_traj_.points[last].time_from_start;
 
-    // Verifies that the controller has stayed within the trajectory constraints.
+    // Verifies that the controller has stayed within the trajectory constraints
 
     if (now < end_time)
     {
@@ -309,7 +307,7 @@ private:
     {
       // Checks that we have ended inside the goal constraints
       bool inside_goal_constraints = true;
-      for (size_t i = 0; i < msg->joint_names.size() && inside_goal_constraints; ++i)
+      for (size_t i = 0; i < msg->joint_names.size() && i < msg->error.positions.size() && inside_goal_constraints; ++i)
       {
         double abs_error = fabs(msg->error.positions[i]);
         double goal_constraint = goal_constraints_[msg->joint_names[i]];
@@ -317,9 +315,9 @@ private:
           inside_goal_constraints = false;
 
         // It's important to be stopped if that's desired.
-        if (fabs(msg->desired.velocities[i]) < 1e-6)
+        if (i < msg->desired.velocities.size() && fabs(msg->desired.velocities[i]) < 1e-6)
         {
-          if (fabs(msg->actual.velocities[i]) > stopped_velocity_tolerance_)
+          if (i < msg->actual.velocities.size() && fabs(msg->actual.velocities[i]) > stopped_velocity_tolerance_)
             inside_goal_constraints = false;
         }
       }

@@ -1,5 +1,9 @@
 <launch>
 
+  <!-- COM port for hardware device -->
+  <arg name="port" default="" />
+  <arg name="baud" default="230400" />
+
   <!-- By default, we do not start a database (it can be large) -->
   <arg name="db" default="false" />
   <!-- Allow user to specify database location -->
@@ -8,7 +12,10 @@
   <!-- By default, we are not in debug mode -->
   <arg name="debug" default="false" />
 
-  <include file="$(find we_r2_moveit_config)/launch/hardware_interface.launch" />
+  <include file="$(find we_r2_moveit_config)/launch/hardware_interface.launch">
+    <arg name="port" default="$(arg port)" />
+    <arg name="baud" default="$(arg baud)" />
+  </include>
 
   <!-- Given the published joint states, publish tf for the robot links -->
   <!-- listens to feedback from robot on /we_r2_arm/joint_states -->

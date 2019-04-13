@@ -1,5 +1,9 @@
 <launch>
 
+  <!-- COM port for hardware device -->
+  <arg name="port" default="" />
+  <arg name="baud" default="230400" />
+
   <!-- Load the URDF, SRDF and other .yaml configuration files on the param server -->
   <include file="$(find we_r2_moveit_config)/launch/planning_context.launch">
     <arg name="load_robot_description" value="true"/>
@@ -9,4 +13,11 @@
   <node ns="arm_controller" name="arm_action_node" pkg="we_r2_moveit_config" type="joint_trajectory_action_node" required="true" output="screen" />
 
   <!-- load hardware serial interface for Arduino/listener-->
+  <group if="$(eval port != '')">
+    <node pkg="rosserial_python" type="serial_node.py" name="rosserial_server" output="screen">
+      <param name="port" value="$(arg port)" />
+      <param name="baud" value="$(arg baud)" />
+    </node>
+    <node pkg="rosserial_python" type="message_info_service.py" name="rosserial_message_info" />
+  </group>
 </launch>
