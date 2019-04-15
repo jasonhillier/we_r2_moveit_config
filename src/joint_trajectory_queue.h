@@ -30,7 +30,7 @@ class JointTrajectoryQueue
         void stop()
         {
             trajectory_msgs::JointTrajectoryPoint empty;
-            empty.time_from_start = ros::Duration(-1);
+            empty.time_from_start = ros::Duration(-1, 0);
             _pub_controller_command.publish(empty);
         }
 
