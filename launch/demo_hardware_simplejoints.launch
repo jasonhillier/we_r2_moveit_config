@@ -42,7 +42,7 @@
   </include>
 
   <group if="$(eval port != '')">
-    <node pkg="rosserial_python" type="serial_node.py" name="rosserial_server" output="screen">
+    <node pkg="rosserial_python" type="serial_node.py" name="rosserial_server" output="screen" respawn="true">
       <param name="port" value="$(arg port)" />
       <param name="baud" value="$(arg baud)" />
     </node>

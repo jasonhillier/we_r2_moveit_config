@@ -9,3 +9,13 @@ controller_list:
       - joint3
       - joint4
       - joint5
+# Settings for ros_control hardware interface
+arm_controller:
+  joints:
+    - joint0
+    - joint1
+    - joint2
+    - joint3
+    - joint4
+    - joint5
+  
