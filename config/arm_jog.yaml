@@ -1,0 +1,30 @@
+jog_joint_node:
+  joint_names:
+    - joint0
+    - joint1
+    - joint2
+    - joint3
+    - joint4
+    - joint5
+
+jog_frame_node:
+  group_names:
+    - arm
+  frame_names:
+    - base_link
+  link_names:
+    - end_effector_link__1
+
+# Somehow, UR5 moveit doesn't have controller name, so specify here
+move_group:
+  controller_list:
+    - name: arm_controller
+      action_ns: follow_joint_trajectory
+      type: FollowJointTrajectory
+      joints:
+      - joint0
+      - joint1
+      - joint2
+      - joint3
+      - joint4
+      - joint5
