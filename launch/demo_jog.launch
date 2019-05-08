@@ -2,7 +2,7 @@
 	<!-- COM port for hardware device -->
   <arg name="port" default="" />
   <arg name="baud" default="230400" />
-  
+  <!-- Requires jog_control package: https://github.com/tork-a/jog_control -->
   <arg name="use_fake_joint" default="false"/>
   <arg name="use_moveit" default="false"/>
   <arg name="use_rviz" default="true"/>

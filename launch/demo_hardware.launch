@@ -4,6 +4,8 @@
   <arg name="port" default="" />
   <arg name="baud" default="230400" />
 
+  <arg name="rviz_planner" default="true" />
+
   <!-- By default, we do not start a database (it can be large) -->
   <arg name="db" default="false" />
   <!-- Allow user to specify database location -->
@@ -30,7 +32,7 @@
   </include>
 
   <!-- Run Rviz and load the default config to see the state of the move_group node -->
-  <include file="$(find we_r2_moveit_config)/launch/moveit_rviz.launch">
+  <include if="$(arg rviz_planner)" file="$(find we_r2_moveit_config)/launch/moveit_rviz.launch">
     <arg name="config" value="true"/>
     <arg name="debug" value="$(arg debug)"/>
   </include>
