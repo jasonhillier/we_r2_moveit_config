@@ -1,0 +1,34 @@
+<launch>
+	<!-- COM port for hardware device -->
+  <arg name="port" default="" />
+  <arg name="baud" default="230400" />
+  
+  <arg name="use_fake_joint" default="false"/>
+  <arg name="use_moveit" default="false"/>
+  <arg name="use_rviz" default="true"/>
+  <arg name="use_joy" default="true"/>
+
+  <include file="$(find we_r2_moveit_config)/launch/demo_hardware.launch">
+	<arg name="rviz_planner" value="false" />
+  </include>
+
+  <!-- Launch fake_joint_driver -->
+  <node name="fake_joint_driver" pkg="fake_joint_driver" type="fake_joint_driver_node" if="$(arg use_fake_joint)" />
+  
+  <!-- Launch rviz -->
+  <node if="$(arg use_rviz)"
+	name="rviz" pkg="rviz" type="rviz"
+	args="-d $(find jog_launch)/launch/jog.rviz"/>
+
+  <rosparam command="load" file="$(find we_r2_moveit_config)/config/arm_jog.yaml"/>
+  <node name="jog_joint_node" pkg="jog_controller" type="jog_joint_node"/>
+  <node name="jog_frame_node" pkg="jog_controller" type="jog_frame_node"/>
+
+  <!-- Launch joypad -->
+  <include if="$(arg use_joy)" file="$(find jog_controller)/launch/joypad.launch">
+    <arg name="group_name" value="arm"/>
+    <arg name="frame_id" value="base_link"/>
+    <arg name="link_name" value="end_effector_link__1"/>
+  </include>
+
+</launch>
