@@ -43,8 +43,11 @@
     <arg name="debug" value="$(arg debug)"/>
   </include>
 
-  <!-- Run Rviz and load the default config to see the state of the move_group node -->
-  <node name="foxglove_bridge" />
+  <!-- Start a foxglove bridge -->
+  <include file="$(find foxglove_bridge)/launch/foxglove_bridge.launch">
+    <arg name="port" value="8765" />
+    <!-- ... other arguments ... -->
+  </include>
 
   <!-- If database loading was enabled, start mongodb as well -->
   <include file="$(find we_r2_moveit_config)/launch/default_warehouse_db.launch" if="$(arg db)">
