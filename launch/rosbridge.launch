@@ -19,7 +19,9 @@
 
   <!-- Given the published joint states, publish tf for the robot links -->
   <!-- listens to feedback from robot on /joint_states -->
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true">
+    <param name="robot_description" textfile="/home/jason/ros_workspace/src/we_r2_moveit_config/config/we_r2_arm.urdf"/>
+  </node> 
 
   <!-- Run the main MoveIt! executable without trajectory execution (we do not have controllers configured by default) -->
   <!-- will publish to robot on /move_group/fake_controller_joint_states -->
